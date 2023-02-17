@@ -1,6 +1,6 @@
 const fs =require('fs');
 
-let argt=process.argv[2], argt2=process.argv.slice(3), sudoku, sudoku2=[], pst=0, finish, nbrLig, nbrcol, arrayNombre=[], arrayNombreSelec, caseVide; //console.log(argt, argt2[0]);
+let argt=process.argv[2], argt2=process.argv.slice(3), sudoku, sudoku2=[], pst=0, finish, nbrLig, nbrcol, arrayNombre=[], arrayNombreSelec, caseVide, sudoku2Final=""; //console.log(argt, argt2[0]);
 //gestion erreur argument
 function erreurArgt(argt,argt2){
     if(argt===undefined || argt2[0]!=undefined){
@@ -49,7 +49,7 @@ for (let a=0; a<=sudoku.length-1; a++){
         break;
     }
 
-} console.log('chaque ligne du sudoku dans un index: ',sudoku2);
+} //console.log('chaque ligne du sudoku dans un index: ',sudoku2);
 
 /*compter le nombre de ligne (en comptant le nombre d'element de mon tableau) et de colonne (en comptant le nombre de caractere dans un element de mon tableau) de mon sudoku et les stocker dans une variable*/
 nbrLig=sudoku2.length; nbrcol=sudoku2[0].length; //console.log(nbrLig,nbrcol);
@@ -103,10 +103,12 @@ for (let ligne=0; ligne<=sudoku2.length-1; ligne++){
                                         {
                                             for(let b=0; b<=2; b++){
                                                 if(arrayNombreSelec===sudoku2[a][b]){
-                                                    console.log(arrayNombreSelec,'est present dans la troisieme contrainte region'); present0=true; break;
+                                                   //console.log(arrayNombreSelec,'est present dans la troisieme contrainte region');
+                                                   present0=true; break;
                                                 }
                                                 if(a===2 && b===2){
-                                                    sudoku2[ligne][colSelec]+=arrayNombreSelec.toString(); console.log(arrayNombreSelec,' est candidat'); break;
+                                                    sudoku2[ligne][colSelec]+=arrayNombreSelec.toString(); //console.log(arrayNombreSelec,' est candidat'); 
+                                                    break;
                                                 }
                                             }
                                             if(present0===true){break};
@@ -118,10 +120,12 @@ for (let ligne=0; ligne<=sudoku2.length-1; ligne++){
                                         {
                                             for(let d=3; d<=5; d++){
                                                 if(arrayNombreSelec===sudoku2[c][d]){
-                                                    console.log(arrayNombreSelec,'est present dans la troisieme contrainte region',colSelec,c,d); present1=true; break;
+                                                    //console.log(arrayNombreSelec,'est present dans la troisieme contrainte region',colSelec,c,d);
+                                                    present1=true; break;
                                                 }
                                                 if(c===2 && d===5){
-                                                    sudoku2[ligne][colSelec]+=arrayNombreSelec.toString(); console.log(arrayNombreSelec,' est candidat'); break;
+                                                    sudoku2[ligne][colSelec]+=arrayNombreSelec.toString(); //console.log(arrayNombreSelec,' est candidat'); 
+                                                    break;
                                                 }
                                             }
                                             if(present1===true){break};
@@ -133,58 +137,117 @@ for (let ligne=0; ligne<=sudoku2.length-1; ligne++){
                                         {
                                             for(let f=6; f<=8; f++){
                                                 if(arrayNombreSelec===sudoku2[e][f]){
-                                                    console.log(arrayNombreSelec,'est present dans la troisieme contrainte region'); present2=true; break;
+                                                    //console.log(arrayNombreSelec,'est present dans la troisieme contrainte region', colSelec, e,f);
+                                                    present2=true; break;
                                                 }
                                                 if(e===2&&f===8){
-                                                    sudoku2[ligne][colSelec]+=arrayNombreSelec.toString(); console.log(arrayNombreSelec,' est candidat'); break;
+                                                    sudoku2[ligne][colSelec]+=arrayNombreSelec.toString(); //console.log(arrayNombreSelec,' est candidat'); 
+                                                    break;
                                                 }
                                             }
                                             if(present2===true){break};
                                         }break;
                                     
-                                    case 2<ligne<=5 && colSelec<=2://region d
+                                    case colSelec<=2 && 2<ligne && ligne<=5://region d
                                         let present3;
                                         for (let g=3; g<=5; g++)
                                         {
                                             for(let h=0; h<=2; h++){
                                                 if(arrayNombreSelec===sudoku2[g][h]){
-                                                    console.log(arrayNombreSelec,'est present dans la troisieme contrainte region'); present3=true; break;
+                                                    //console.log(arrayNombreSelec,'est present dans la troisieme contrainte region',g,h);
+                                                    present3=true; break;
                                                 }
                                                 if(g===5 && h===2){
-                                                    sudoku2[ligne][colSelec]+=arrayNombreSelec.toString(); console.log(arrayNombreSelec,' est candidat'); break;
+                                                    sudoku2[ligne][colSelec]+=arrayNombreSelec.toString(); //console.log(arrayNombreSelec,' est candidat'); 
+                                                    break;
                                                 }
                                             }
                                             if(present3===true){break};
                                         }break;
                                     
-                                    case 2<ligne<=5 && 2<colSelec<=5://region e
+                                    case 2<colSelec && colSelec<=5 && 2<ligne && ligne<=5://region e
                                         let present4;
                                         for (let ii=3; ii<=5; ii++)
                                         {
                                             for(let j=3; j<=5; j++){
                                                 if(arrayNombreSelec===sudoku2[ii][j]){
-                                                    console.log(arrayNombreSelec,'est present dans la troisieme contrainte region'); present4=true; break;
+                                                    //console.log(arrayNombreSelec,'est present dans la troisieme contrainte region',ii,j); 
+                                                    present4=true; break;
                                                 }
                                                 if(ii===5 && j===5){
-                                                    sudoku2[ligne][colSelec]+=arrayNombreSelec.toString(); console.log(arrayNombreSelec,' est candidat'); break;
+                                                    sudoku2[ligne][colSelec]+=arrayNombreSelec.toString(); //console.log(arrayNombreSelec,' est candidat'); 
+                                                    break;
                                                 }
                                             }
                                             if(present4===true){break};
                                         }break;
                                     
-                                    case 2<ligne<=5 && 5<colSelec<=8://region f
+                                    case 5<colSelec && colSelec<=8 && 2<ligne && ligne<=5://region f
                                         let present5;
                                         for (let k=3; k<=5; k++)
                                         {
                                             for(let l=6; l<=8; l++){
                                                 if(arrayNombreSelec===sudoku2[k][l]){
-                                                    console.log(arrayNombreSelec,'est present dans la troisieme contrainte region'); present5=true; break;
+                                                    //console.log(arrayNombreSelec,'est present dans la troisieme contrainte region',colSelec,k,l,'region f'); 
+                                                    present5=true; break;
                                                 }
                                                 if(k===5 && l===8){
-                                                    sudoku2[ligne][colSelec]+=arrayNombreSelec.toString(); console.log(arrayNombreSelec,' est candidat'); break;
+                                                    sudoku2[ligne][colSelec]+=arrayNombreSelec.toString(); //console.log(arrayNombreSelec,' est candidat'); 
+                                                    break;
                                                 }
                                             }
                                             if(present5===true){break};
+                                        }break;
+                                    
+                                    case 5<ligne && ligne<=8 && colSelec<=2://region g
+                                        let present6;
+                                        for (let m=6; m<=8; m++)
+                                        {
+                                            for(let n=0; n<=2; n++){
+                                                if(arrayNombreSelec===sudoku2[m][n]){
+                                                    console.log(arrayNombreSelec,'est present dans la troisieme contrainte region',m,n,'region g'); 
+                                                    present6=true; break;
+                                                }
+                                                if(m===8 && n===2){
+                                                    sudoku2[ligne][colSelec]+=arrayNombreSelec.toString(); //console.log(arrayNombreSelec,' est candidat'); 
+                                                    break;
+                                                }
+                                            }
+                                        if(present6===true){break};
+                                        }break;
+                                    
+                                    case 5<ligne && ligne<=8 && 2<colSelec && colSelec<=5://region h
+                                        let present7;
+                                        for (let o=6; o<=8; o++)
+                                        {
+                                            for(let p=3; p<=5; p++){
+                                                if(arrayNombreSelec===sudoku2[o][p]){ 
+                                                    console.log(arrayNombreSelec,'est present dans la troisieme contrainte region'); 
+                                                    present7=true; break;
+                                                }
+                                                if(o===8 && p===5){
+                                                    sudoku2[ligne][colSelec]+=arrayNombreSelec.toString(); //console.log(arrayNombreSelec,' est candidat'); 
+                                                    break;
+                                                }
+                                            }
+                                        if(present7===true){break};
+                                        }break;
+                                    
+                                    case 5<ligne && ligne<=8 && 5<=colSelec && colSelec<=8://region i
+                                        let present8;
+                                        for (let q=6; q<=8; q++)
+                                        {
+                                            for(let r=6; r<=8; r++){
+                                                if(arrayNombreSelec===sudoku2[q][r]){ 
+                                                    //console.log(arrayNombreSelec,'est present dans la troisieme contrainte region'); 
+                                                    present8=true; break;
+                                                }
+                                                if(q===8 && r===8){
+                                                    sudoku2[ligne][colSelec]+=arrayNombreSelec.toString(); //console.log(arrayNombreSelec,' est candidat'); 
+                                                    break;
+                                                }
+                                            }
+                                        if(present8===true){break};
                                         }break;
                                 }
                             }
@@ -197,11 +260,29 @@ for (let ligne=0; ligne<=sudoku2.length-1; ligne++){
             continue;
         }
     }
-}console.log(sudoku2);                                   
+}//console.log(sudoku2);
 
+/*trouvez s'il y a des simplet nu dans les candidat si oui supprimer les espaces blancs des string et les convertir en type number et affecter au meme endroit*/
+for(let i=0; i<=sudoku2.length-1; i++){
+    for (let j=0; j<=sudoku2[0].length-1; j++){
+        if(typeof sudoku2[i][j]==="string" ){
+            sudoku2[i][j]=sudoku2[i][j].trim();
+            if(sudoku2[i][j].length===1){
+                sudoku2[i][j]=Number(sudoku2[i][j]);
+            }
+        }
+    }
+}//console.log(sudoku2);
 
-
-                        
+/* accedez à chaque ligne de sudoku2 et les joindre en string rajouter un retour à la ligne et l'affecter dans la variable finale*/
+for (let i=0; i<=sudoku2.length-1; i++){
+    if (i===sudoku2.length-1){
+        sudoku2Final+=sudoku2[i].join('');
+    }
+    else{
+        sudoku2Final+=sudoku2[i].join('')+"\n";
+    }
+}console.log(sudoku2Final);
 
 /*Une fois tout les candidats inserer dans la case vide passer à une autre case vide jusqu'a remplir toute les cases vides.
 Reparcourir le tableau sudoku afin verifier s'il y a des simplets nu(case avec un seul candidat) si oui : inserer se candidat definitivement.
