@@ -47,6 +47,9 @@ function lignEtColonneDans1Index(platV){
     return plateauT;
 }let plateauT=lignEtColonneDans1Index(plateauV); //console.log(plateauT);
 
+let predecesseur=recupContentFile(nomPlateau2);
+let predecessFinal=lignEtColonneDans1Index(predecesseur);
+
 //rechercher l'entrée(coordonée)
 function findEnter(){
     for(let l=0; l<=plateauT.length-1; l++){
@@ -87,7 +90,7 @@ let nbrLigne=plateauT.length-1, nbreColonne=plateauT[0].length-1, debutL=coordEn
 aVisiter.push([debutL,debutC]); aVisiter[0][0]=Number(aVisiter[0][0]); aVisiter[0][1]=Number(aVisiter[0][1]); //console.log(aVisiter);
     
 //je demarre à l'entrée
-console.log(`je demarre au coordonée ligne: ${debutL} et colonne: ${debutC}`.green);
+//console.log(`je demarre au coordonée ligne: ${debutL} et colonne: ${debutC}`.green);
 
 //affecter 0 coups dans l'entrée 1 afin daffecter le nombre de coup au case vide suivante
 plateauT[debutL][debutC]=0; //console.log(plateauT);
@@ -96,19 +99,22 @@ if(debutL===sortieL && debutC===sortieC){
     console.log(`On est sortie du labyrinthe à ${plateauT[debutL][debutC]} coup`);
 }
 else{
-    //acceder au case vide de plateauT recensé dans avisiter pour effectuer les deplacements possibles et ajouter les nouvelles cases àvisiter
+/*verifier les 4 types de deplacements possibles pour chaque cases vides du tableau avisiter et ajouter les nouvelles cases àvisiter et ajouter d'ou l'on vient dans le tableau predecesseur
+    si il y a 2 dans le type de deplacement qu'on effectue alors affecter le nombre de coup dans coup final et sortir de la boucle*/
     for(let i=0; i<=aVisiter.length-1; i++){
         function moveNord(l,c){
             if(l<=nbrLigne && l>0){
-                if(plateauT[l-1][c]==='.'){console.log('on vient de: ', l, c);
-                    console.log('au nord il y a: '+plateauT[l-1][c]);
-                    plateauT[l-1][c]=plateauT[l][c]+1; console.log(`deplacement nord de ${plateauT[l-1][c]} coup`);
-                    //aVisiter[post+1]=l-1+':'+c; aVisiter[post+1]=aVisiter[post+1].split(':'); aVisiter[post+1][0]=Number(aVisiter[post+1][0]); aVisiter[post+1][1]=Number(aVisiter[post+1][1]); console.log(aVisiter);
+                if(plateauT[l-1][c]==='.'){
+                    //console.log('on vient de: ', l, c);
+                    predecessFinal[l-1][c]=[l,c];
+                    //console.log('au nord il y a: '+plateauT[l-1][c]);
+                    plateauT[l-1][c]=plateauT[l][c]+1; //console.log(`deplacement nord de ${plateauT[l-1][c]} coup`);
                     aVisiter.push([l-1,c]); //console.log(aVisiter)
                 }
                 if(plateauT[l-1][c]==='2'){
-                    console.log('on vient de: ', l,c);
-                    console.log('au nord il y a: '+plateauT[l-1][c]);
+                    //console.log('on vient de: ', l,c);
+                    predecessFinal[l-1][c]=[l,c];
+                    //console.log('au nord il y a: '+plateauT[l-1][c]);
                     coupFinal=plateauT[l][c]+1; //console.log(`on est sortie du labyrinthe en ${coupFinal} coups`.yellow);
                 }
             }
@@ -117,31 +123,34 @@ else{
     
         function moveSud(lS,cS){
             if(0<=lS && lS<nbrLigne){
-                if(plateauT[lS+1][cS]==='.'){console.log('on vient de: ',lS,cS);
-                    console.log('sud: '+plateauT[lS+1][cS]);
-                    plateauT[lS+1][cS]=plateauT[lS][cS]+1; console.log(`deplacement sud de ${plateauT[lS+1][cS]} coup`);
+                if(plateauT[lS+1][cS]==='.'){//console.log('on vient de: ',lS,cS);
+                    predecessFinal[lS+1][cS]=[lS,cS];
+                    //console.log('sud: '+plateauT[lS+1][cS]);
+                    plateauT[lS+1][cS]=plateauT[lS][cS]+1; //console.log(`deplacement sud de ${plateauT[lS+1][cS]} coup`);
                     aVisiter.push([lS+1,cS]);
                 }
                 if(plateauT[lS+1][cS]==='2'){
-                    console.log('on vient de: ', lS,cS);
-                    console.log('au sud il y a: '+plateauT[l-1][c]);
+                    //console.log('on vient de: ', lS,cS);
+                    predecessFinal[lS+1][cS]=[lS,cS];
+                    //console.log('au sud il y a: '+plateauT[l-1][c]);
                     coupFinal=plateauT[lS][cS]+1; //console.log(`on est sortie du labyrinthe en ${coupFinal} coups`.yellow);
                 }
-                
             }
         }moveSud(aVisiter[i][0],aVisiter[i][1]);
         if(coupFinal != undefined){break;}
     
         function moveEst(lE,cE){ 
             if(cE>=0 && cE<nbreColonne){
-                if(plateauT[lE][cE+1]==='.'){console.log('on vient de: ',lE,cE);
-                    console.log('est il y a: '+plateauT[lE][cE+1]);
-                    plateauT[lE][cE+1]=plateauT[lE][cE]+1; console.log(`deplacement est de ${plateauT[lE][cE+1]}`);
+                if(plateauT[lE][cE+1]==='.'){//console.log('on vient de: ',lE,cE);
+                    predecessFinal[lE][cE+1]=[lE,cE];
+                    //console.log('est il y a: '+plateauT[lE][cE+1]);
+                    plateauT[lE][cE+1]=plateauT[lE][cE]+1; //console.log(`deplacement est de ${plateauT[lE][cE+1]}`);
                     aVisiter.push([lE,cE+1]);
                 }
                 if(plateauT[lE][cE+1]==='2'){
-                    console.log('on vient de: ', lE,cE);
-                    console.log('à est il y a: '+plateauT[l-1][c]);
+                    //console.log('on vient de: ', lE,cE);
+                    predecessFinal[lE][cE+1]=[lE,cE];
+                    //console.log('à est il y a: '+plateauT[l-1][c]);
                     coupFinal=plateauT[lE][cE]+1; //console.log(`on est sortie du labyrinthe en ${coupFinal} coups`.yellow);
                 }
             }
@@ -150,14 +159,16 @@ else{
     
         function moveOuest(lO,cO){
             if(cO>0 && cO<=nbreColonne){
-                if(plateauT[lO][cO-1]==='.'){console.log('on vient de: ',lO,cO);
-                    console.log('ouest il y a: '+plateauT[lO][cO-1]);
-                    plateauT[lO][cO-1]=plateauT[lO][cO]+1; console.log(`deplacement ouest de ${plateauT[lO][cO-1]}`);
+                if(plateauT[lO][cO-1]==='.'){//console.log('on vient de: ',lO,cO);
+                    predecessFinal[lO][cO-1]=[lO,cO];
+                    //console.log('ouest il y a: '+plateauT[lO][cO-1]);
+                    plateauT[lO][cO-1]=plateauT[lO][cO]+1; //console.log(`deplacement ouest de ${plateauT[lO][cO-1]}`);
                     aVisiter.push([lO,cO-1]);
                 }
                 if(plateauT[lO][cO-1]==='2'){
-                    console.log('on vient de: ', lO,cO);
-                    console.log('à ouest il y a: '+plateauT[l-1][c]);
+                    //console.log('on vient de: ', lO,cO);
+                    predecessFinal[lO][cO-1]=[lO,cO];
+                    //console.log('à ouest il y a: '+plateauT[l-1][c]);
                     coupFinal=plateauT[lO][cO]+1; //console.log(`on est sortie du labyrinthe en ${coupFinal} coups`.yellow);
                 }
             }   
@@ -174,11 +185,47 @@ else{
             plateauT=plateauT.join('\n'); console.log(plateauT); return `il n'y a pas de sortie possible`.red;
         }
         else{
-            //convertir plateauT en variable
-            for(let i=0; i<=plateauT.length-1; i++){
-                plateauT[i]=plateauT[i].join('');
-            }
-            plateauT=plateauT.join('\n'); console.log(plateauT); return `On est sortie du labyrinthe en: ${coupFinal} coups`.yellow;
+            //affecter le caractere chemin o dans le tableau predecesseur
+            for (let i=0; i>=0; i++){
+                if((sortieL===debutL) && (sortieC===debutC)){
+                    break;
+                }
+                else{
+                    //console.log('On est à la case', sortieL, sortieC);
+                    function parcourPredecesseur(l,c){
+                        sortieL=predecessFinal[l][c][0]; 
+                        sortieC=predecessFinal[l][c][1];
+                        //console.log('je viens de',predecessFinal[l][c]);
+                        plateauT[l][c]='o';
+                    }parcourPredecesseur(sortieL,sortieC);
+                }
+            }//console.log(plateauT);
+
+            //parcourir chaque caractere de plateaut pour affecter un carctere . là ou il y a des nombres
+            for (let i=0; i<=plateauT.length-1; i++){
+                for(let j=0; j<=plateauT[0].length-1; j++){
+                    if(i===coordExit[0] && j===coordExit[1]){
+                        plateauT[i][j]='2';
+                    }
+                    else if(i===coordEnter[0] && j===coordEnter[1]){
+                        plateauT[i][j]='1';
+                    }
+                    else if(isNaN(plateauT[i][j])===false){//console.log(plateauT[i][j]); 
+                        plateauT[i][j]='.';
+                    }
+                }
+            }//console.log(plateauT);
+
+            function convertToVariable(){
+                //convertir plateauT en variable
+                for(let i=0; i<=plateauT.length-1; i++){
+                    plateauT[i]=plateauT[i].join('');
+                }
+                plateauT=plateauT.join('\n'); 
+                return plateauT;
+            }console.log(convertToVariable());
+            
+            return `On est sortie du labyrinthe en: ${coupFinal} coups`.yellow;
         }
     }console.log(resultat());
 }
