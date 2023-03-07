@@ -196,7 +196,7 @@ else{
                         sortieL=predecessFinal[l][c][0]; 
                         sortieC=predecessFinal[l][c][1];
                         //console.log('je viens de',predecessFinal[l][c]);
-                        plateauT[l][c]='o';
+                        plateauT[l][c]='o'.yellow;
                     }parcourPredecesseur(sortieL,sortieC);
                 }
             }//console.log(plateauT);
