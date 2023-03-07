@@ -1,3 +1,4 @@
+let colors=require('colors');
 //gestion erreur argument
 function gestErrArgt(){
     let nomPlateau=process.argv.slice(2);
@@ -11,21 +12,25 @@ function gestErrArgt(){
 let nomPlateau2=gestErrArgt();
 
 //main code
-function findOut(namePlateau){
+function recupContentFile(namePlateau){
     /*recuperer le contenu du fichier namePlateau2 et le stocker dans une variable*/
-    let fs=require('fs'), colors=require('colors'), plateauV, plateauT=[''], index=0, finish;
+    let fs=require('fs'), plateauV;
     plateauV=fs.readFileSync(namePlateau[0],{encoding:'utf-8'}); //console.log(plateauV);
-    
+    return plateauV;
+}let plateauV=recupContentFile(nomPlateau2); //console.log(plateauV);
+
+function lignEtColonneDans1Index(platV){
     /*mettre chaque ligne du plateauV dans un index de plateauT*/
-    for(let i=0; i<=plateauV.length-1; i++){
-        for(let j=index; j<=plateauV.length-1; j++){
-            if(plateauV[j]==="\n"){
+    let plateauT=[''], index=0,finish;
+    for(let i=0; i<=platV.length-1; i++){
+        for(let j=index; j<=platV.length-1; j++){
+            if(platV[j]==="\n"){
                 index=j+1; break;
             }
-            else if(plateauV[j]==="."|| plateauV[j]==="*"|| plateauV[j]==='1'|| plateauV[j]==='2'){
-                plateauT[i]+=plateauV[j];
+            else if(platV[j]==="."|| platV[j]==="*"|| platV[j]==='1'|| platV[j]==='2'){
+                plateauT[i]+=platV[j];
             }
-            if(j===plateauV.length-1){
+            if(j===platV.length-1){
                 finish=true;
             }
         }
@@ -39,52 +44,59 @@ function findOut(namePlateau){
         plateauT[i].shift();
         plateauT[i]=plateauT[i][0].split('');
     } nbrElementD1Ligne=plateauT[0].length; //console.log(plateauT);
-    
-    //rechercher l'entrée(coordonée)
-    let coordEnter;
-    function findEnter(){
-        for(let l=0; l<=plateauT.length-1; l++){
-            for(let c=0; c<=plateauT.length-1; c++){
-                if(plateauT[l][c]==='1'){
-                    return coordEnter=`${l}:${c}`;
-                }
-            }
-            
-        }
-    } coordEnter=findEnter(); //console.log(`Coordonnée de l'entrée ligne:colonne ${coordEnter}`); 
-   
-    //convertir coordEnter en tableau et convetir chaque element en number
-    coordEnter=coordEnter.split(':');
-    for(let i=0; i<=coordEnter.length-1; i++){coordEnter[i]=Number(coordEnter[i]);}
+    return plateauT;
+}let plateauT=lignEtColonneDans1Index(plateauV); //console.log(plateauT);
 
-    //rechercher la sortie(coordonee)
-    let coordExit;
-    function findExit(){
-        for(let l=0; l<=plateauT.length-1; l++){
-            for(let c=0; c<=plateauT.length-1; c++){
-                if(plateauT[l][c]==='2'){
-                    return coordExit=`${l}:${c}`;
-                }
+//rechercher l'entrée(coordonée)
+function findEnter(){
+    for(let l=0; l<=plateauT.length-1; l++){
+        for(let c=0; c<=plateauT.length-1; c++){
+            if(plateauT[l][c]==='1'){
+                return `${l}:${c}`;
+            }
+        }  
+    }
+} let coordEnter=findEnter(); //console.log(`Coordonnée de l'entrée ligne:colonne ${coordEnter}`);
+   
+//convertir coordEnter en tableau et convetir chaque element en number
+coordEnter=coordEnter.split(':');
+for(let i=0; i<=coordEnter.length-1; i++){coordEnter[i]=Number(coordEnter[i]);}
+
+//rechercher la sortie(coordonee)
+function findExit(){
+    for(let l=0; l<=plateauT.length-1; l++){
+        for(let c=0; c<=plateauT.length-1; c++){
+            if(plateauT[l][c]==='2'){
+                return `${l}:${c}`;
             }
         }
-    } coordExit=findExit(); //console.log(`Coordonnée de la sortie ligne:colonne ${coordExit}`); 
+    }
+} let coordExit=findExit(); //console.log(`Coordonnée de la sortie ligne:colonne ${coordExit}`); 
     
-    //convertir coordExit en tableau et convertir chaque element en number
-    coordExit=coordExit.split(':');
-    for(let i=0; i<=coordExit.length-1; i++){coordExit[i]=Number(coordExit[i]);} 
+//convertir coordExit en tableau et convertir chaque element en number
+coordExit=coordExit.split(':');
+for(let i=0; i<=coordExit.length-1; i++){coordExit[i]=Number(coordExit[i]);} 
+
+/*créer un tableau avisiter contenant les coordonee des cases accessibles
+acceder à ces coordonnees ou ces cases et verifier les 4 deplacements possibles ou verifier ses voisins
+    si deplacement possibles affecter la distance dans ces cases vide et ajouter les coordonnees de cette nouvelle case dans le tablau avisiter afin de verifier aussi les 4 deplacements possibles autour de celle ci
+*/
+let nbrLigne=plateauT.length-1, nbreColonne=plateauT[0].length-1, debutL=coordEnter[0], debutC=coordEnter[1], sortieL=coordExit[0], sortieC=coordExit[1], aVisiter=[], coupFinal=undefined; //console.log(nbrLigne,nbreColonne,debutL,debutC,sortieL,sortieC);
+
+//inserer les coordonnées de la premiere case vide dans le tableau avisiter. Ces coordonnees correspondent à l'entré du labyrinthe depart
+aVisiter.push([debutL,debutC]); aVisiter[0][0]=Number(aVisiter[0][0]); aVisiter[0][1]=Number(aVisiter[0][1]); //console.log(aVisiter);
     
-    let nbrLigne=plateauT.length-1, nbreColonne=plateauT[0].length-1, debutL=coordEnter[0], debutC=coordEnter[1], sortieL=coordExit[0], sortieC=coordExit[1], aVisiter=[], coupFinal=undefined; //console.log(nbrLigne,nbreColonne,debutL,debutC,sortieL,sortieC);
-    
-    //inserer à la position 0 de aVisiter les coordonnées de depart et ajouter les case à visiter
-    aVisiter.push([debutL,debutC]); aVisiter[0][0]=Number(aVisiter[0][0]); aVisiter[0][1]=Number(aVisiter[0][1]); //console.log(aVisiter);
-    
-    //je demarre à l'entrée
-    console.log(`je demarre au coordonée ligne: ${debutL} et colonne: ${debutC}`.green);
-    
-    //affecter 0 coups dans l'entrée 1
-    plateauT[debutL][debutC]=0; //console.log(plateauT);
-    
-    //acceder au case vide de plateauT pour effectuer les deplacements possibles
+//je demarre à l'entrée
+console.log(`je demarre au coordonée ligne: ${debutL} et colonne: ${debutC}`.green);
+
+//affecter 0 coups dans l'entrée 1 afin daffecter le nombre de coup au case vide suivante
+plateauT[debutL][debutC]=0; //console.log(plateauT);
+
+if(debutL===sortieL && debutC===sortieC){
+    console.log(`On est sortie du labyrinthe à ${plateauT[debutL][debutC]} coup`);
+}
+else{
+    //acceder au case vide de plateauT recensé dans avisiter pour effectuer les deplacements possibles et ajouter les nouvelles cases àvisiter
     for(let i=0; i<=aVisiter.length-1; i++){
         function moveNord(l,c){
             if(l<=nbrLigne && l>0){
@@ -99,7 +111,6 @@ function findOut(namePlateau){
                     console.log('au nord il y a: '+plateauT[l-1][c]);
                     coupFinal=plateauT[l][c]+1; //console.log(`on est sortie du labyrinthe en ${coupFinal} coups`.yellow);
                 }
-                
             }
         } moveNord(aVisiter[i][0],aVisiter[i][1]);
         if(coupFinal != undefined){break;}
@@ -153,7 +164,7 @@ function findOut(namePlateau){
         }moveOuest(aVisiter[i][0],aVisiter[i][1]);
         if(coupFinal != undefined){break;}
     }//console.log(plateauT);
-
+    
     function resultat(){
         if(coupFinal===undefined){
             //convertir plateauT en variable
@@ -170,5 +181,4 @@ function findOut(namePlateau){
             plateauT=plateauT.join('\n'); console.log(plateauT); return `On est sortie du labyrinthe en: ${coupFinal} coups`.yellow;
         }
     }console.log(resultat());
-        
-}findOut(nomPlateau2);
+}
