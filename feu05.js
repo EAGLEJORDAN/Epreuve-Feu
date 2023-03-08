@@ -47,6 +47,7 @@ function lignEtColonneDans1Index(platV){
     return plateauT;
 }let plateauT=lignEtColonneDans1Index(plateauV); //console.log(plateauT);
 
+/*avoir un deuxieme tableau contenant le contenu du fichier et l'appeler predecessseur afin d'y affecter les coordonnées des cases d'ou l'on vient */
 let predecesseur=recupContentFile(nomPlateau2);
 let predecessFinal=lignEtColonneDans1Index(predecesseur);
 
@@ -95,7 +96,7 @@ aVisiter.push([debutL,debutC]); aVisiter[0][0]=Number(aVisiter[0][0]); aVisiter[
 //affecter 0 coups dans l'entrée 1 afin daffecter le nombre de coup au case vide suivante
 plateauT[debutL][debutC]=0; //console.log(plateauT);
 
-if(debutL===sortieL && debutC===sortieC){
+if(debutL===sortieL && debutC===sortieC){/*verifier si l'entréee n'est pas égale à la sortie */
     console.log(`On est sortie du labyrinthe à ${plateauT[debutL][debutC]} coup`);
 }
 else{
@@ -178,6 +179,21 @@ else{
     
     function resultat(){
         if(coupFinal===undefined){
+            //parcourir chaque caractere de plateaut pour affecter un carctere . là ou il y a des nombres
+            for (let i=0; i<=plateauT.length-1; i++){
+                for(let j=0; j<=plateauT[0].length-1; j++){
+                    if(i===coordExit[0] && j===coordExit[1]){
+                        plateauT[i][j]='2';
+                    }
+                    else if(i===coordEnter[0] && j===coordEnter[1]){
+                        plateauT[i][j]='1';
+                    }
+                    else if(isNaN(plateauT[i][j])===false){//console.log(plateauT[i][j]); 
+                        plateauT[i][j]='.';
+                    }
+                }
+            }//console.log(plateauT);
+
             //convertir plateauT en variable
             for(let i=0; i<=plateauT.length-1; i++){
                 plateauT[i]=plateauT[i].join('');
